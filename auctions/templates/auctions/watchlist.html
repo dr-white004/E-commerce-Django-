@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container my-4">
+    <h2 class="text-center mb-4">Watchlist</h2>
+
+    {% for entry in watchlist %}
+    <a href="{% url 'goto' num=entry.id %}" style="text-decoration: none; color: inherit;">
+        <div class="row mb-4">
+            <div class="col-12 col-md-4">
+                <img src="{{ entry.image }}" alt="not available" class="img-fluid" style="max-height: 250px;">
+            </div>
+            <div class="col-12 col-md-8">
+                <ul class="list-unstyled">
+                    <li><strong>{{ entry.title }}</strong></li>
+                    <li>{{ entry.description }}</li>
+                    <li>Category: {{ entry.category }}</li>
+                    <li>Price: {{ entry.price }}</li>
+                </ul>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+
+    {% if watchlist|length == 0 %}
+        <p class="text-center">Your watchlist is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}

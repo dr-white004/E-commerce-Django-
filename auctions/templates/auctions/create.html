@@ -1,0 +1,49 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container my-4">
+        <h2 class="text-center mb-4">Create Listings Here</h2>
+
+        <form action="{% url 'create' %}" method="post" class="row g-3 justify-content-center">
+            {% csrf_token %}
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="title" placeholder="Title" name="title" required>
+                    <label for="title">Title</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="description" placeholder="Description" name="description" required>
+                    <label for="description">Description</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="bid" placeholder="Starting bid" name="bid" required>
+                    <label for="bid">Starting Bid</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    <input type="url" class="form-control" id="img" placeholder="Image URL" name="img" required>
+                    <label for="img">Image URL</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <select name="category" id="category" class="form-select mb-3" required>
+                    <option value="no category">No Category</option>
+                    <option value="bags">Bags</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="toys">Toys</option>
+                    <option value="cosmetics">Cosmetics</option>
+                </select>
+            </div>
+            <div class="col-12 text-center">
+                <input type="submit" value="Create" class="btn btn-primary w-50">
+            </div>
+        </form>
+    </div>
+{% endblock %}
