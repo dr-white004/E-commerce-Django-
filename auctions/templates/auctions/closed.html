@@ -1,29 +1,304 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container my-4">
-        <h2 class="text-center mb-4">Closed Listings</h2>
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+        transform: translateY(-5px);
+    }
+    
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+    
+    .glass-card:hover::before {
+        left: 100%;
+    }
+    
+    .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        padding: 2px;
+    }
+    
+    .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+        border-radius: 20px;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .bg-main {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f3460 100%);
+        min-height: 100vh;
+    }
+    
+    .price-highlight {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+    }
+    
+    .winner-highlight {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 600;
+    }
+    
+    .category-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+        display: inline-block;
+        font-size: 14px;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .closed-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        z-index: 10;
+    }
+    
+    .no-image-placeholder {
+        background: linear-gradient(135deg, rgba(107, 114, 128, 0.3), rgba(75, 85, 99, 0.3));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 14px;
+        height: 200px;
+    }
+    
+    .card-image {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .glass-card:hover .card-image {
+        transform: scale(1.05);
+    }
+    
+    .card-content {
+        padding: 20px;
+        position: relative;
+        z-index: 5;
+    }
+    
+    .card-title {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .card-title:hover {
+        color: #60a5fa;
+        text-decoration: none;
+    }
+    
+    .card-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        line-height: 1.4;
+        margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .card-meta {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+    }
+</style>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for entry in entries %}
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{{ entry.image }}" class="card-img-top" alt="Image not available" style="object-fit: cover; height: 250px;">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <ul class="list-group list-group-flush mb-3">
-                            <li class="list-group-item"><strong>{{ entry.title }}</strong></li>
-                            <li class="list-group-item">{{ entry.description }}</li>
-                            <li class="list-group-item">{{ entry.category }}</li>
-                            <li class="list-group-item">Price: {{ entry.price }}</li>
-                        </ul>
-                        <form action="{% url 'goto' num=entry.id %}" method="post" class="text-center">
-                            {% csrf_token %}
-                            <input type="submit" value="View Details" class="btn btn-info">
-                        </form>
+<div class="bg-main py-12 px-6">
+    <div class="max-w-7xl mx-auto">
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full animate-float"></div>
+        <div class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-blue-600/20 rounded-full animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Header -->
+        <div class="text-center mb-12 relative z-10">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">
+                Closed
+                <span class="bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">Auctions</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-xl mx-auto">
+                Browse completed auctions and see final results
+            </p>
+        </div>
+
+        {% if entries %}
+            <!-- Auctions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
+                {% for entry in entries %}
+                    <div class="glass-card rounded-xl relative">
+                        <!-- Closed Badge -->
+                        <div class="closed-badge">Closed</div>
+                        
+                        <!-- Image Section -->
+                        {% if entry.image %}
+                            <img src="{{ entry.image }}" alt="{{ entry.title }}" class="w-full card-image rounded-t-xl">
+                        {% else %}
+                            <div class="no-image-placeholder rounded-t-xl">
+                                <div class="text-center">
+                                    <div class="text-2xl mb-2">📷</div>
+                                    <div>No Image</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Content Section -->
+                        <div class="card-content">
+                            <h2 class="card-title">
+                                <a href="{% url 'goto' entry.id %}">{{ entry.title }}</a>
+                            </h2>
+                            
+                            <p class="card-description">{{ entry.description }}</p>
+                            
+                            <!-- Category -->
+                            <div class="card-meta">
+                                <span class="category-icon">
+                                    {% if entry.category == "art" %}🎨
+                                    {% elif entry.category == "antiques" %}🏺
+                                    {% elif entry.category == "jewelry" %}💎
+                                    {% elif entry.category == "electronics" %}📱
+                                    {% elif entry.category == "fashion" %}👗
+                                    {% elif entry.category == "books" %}📚
+                                    {% elif entry.category == "music" %}🎵
+                                    {% elif entry.category == "sports" %}⚽
+                                    {% elif entry.category == "coins" %}🪙
+                                    {% elif entry.category == "toys" %}🧸
+                                    {% elif entry.category == "furniture" %}🪑
+                                    {% elif entry.category == "vehicles" %}🚗
+                                    {% elif entry.category == "stamps" %}📮
+                                    {% elif entry.category == "wine" %}🍷
+                                    {% else %}🔗
+                                    {% endif %}
+                                </span>
+                                {{ entry.category|default:"Uncategorized"|title }}
+                            </div>
+                            
+                            <!-- Final Bid -->
+                            <div class="card-meta">
+                                💰 Final Bid: <span class="price-highlight">${{ entry.price.bid }}</span>
+                            </div>
+                            
+                            <!-- Winner -->
+                            <div class="card-meta mb-4">
+                                🏆 Winner: 
+                                {% if entry.winner %}
+                                    <span class="winner-highlight">{{ entry.winner.username }}</span>
+                                {% else %}
+                                    <span class="text-gray-400">No Winner</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- View Details Button -->
+                            <a href="{% url 'goto' entry.id %}" class="btn-primary w-full">
+                                View Details
+                            </a>
+                        </div>
                     </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- No Closed Auctions -->
+            <div class="gradient-border max-w-2xl mx-auto">
+                <div class="glass rounded-2xl p-8 md:p-12 relative z-10 text-center">
+                    <div class="text-6xl mb-4">🏁</div>
+                    <h2 class="text-2xl font-bold text-white mb-4">No Closed Auctions</h2>
+                    <p class="text-gray-300 text-lg">
+                        There are currently no completed auctions to display. Check back later!
+                    </p>
                 </div>
             </div>
-            {% endfor %}
-        </div>
+        {% endif %}
     </div>
+</div>
 {% endblock %}

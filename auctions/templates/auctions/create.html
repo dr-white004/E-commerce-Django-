@@ -1,49 +1,275 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container my-4">
-        <h2 class="text-center mb-4">Create Listings Here</h2>
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .input-glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .input-glass:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        outline: none;
+    }
+    
+    .floating-label {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .input-group input:focus + .floating-label,
+    .input-group input:not(:placeholder-shown) + .floating-label,
+    .input-group textarea:focus + .floating-label,
+    .input-group textarea:not(:placeholder-shown) + .floating-label,
+    .input-group select:focus + .floating-label,
+    .input-group select:not([value=""]) + .floating-label {
+        top: -8px;
+        left: 12px;
+        font-size: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        padding: 0 8px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        padding: 2px;
+    }
+    
+    .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+        border-radius: 20px;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .bg-main {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f3460 100%);
+        min-height: 100vh;
+    }
+    
+    .category-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        display: inline-block;
+    }
+</style>
 
-        <form action="{% url 'create' %}" method="post" class="row g-3 justify-content-center">
-            {% csrf_token %}
-            <div class="col-12 col-md-6">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="title" placeholder="Title" name="title" required>
-                    <label for="title">Title</label>
+<div class="bg-main py-12 px-6">
+    <div class="max-w-2xl mx-auto">
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full animate-float"></div>
+        <div class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-blue-600/20 rounded-full animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Header -->
+        <div class="text-center mb-12 relative z-10">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">
+                Create New
+                <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Auction</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-xl mx-auto">
+                List your treasures and connect with collectors worldwide
+            </p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="gradient-border">
+            <div class="glass rounded-2xl p-8 md:p-12 relative z-10">
+                <form method="POST" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <!-- Title Field -->
+                    <div class="input-group relative">
+                        <input 
+                            type="text" 
+                            name="title" 
+                            id="title" 
+                            placeholder=" "
+                            required 
+                            class="input-glass w-full px-4 py-4 text-white rounded-xl border-0 text-lg"
+                        >
+                        <label for="title" class="floating-label">Auction Title</label>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="input-group relative">
+                        <textarea 
+                            name="description" 
+                            id="description" 
+                            placeholder=" "
+                            rows="4"
+                            class="input-glass w-full px-4 py-4 text-white rounded-xl border-0 text-lg resize-none"
+                        ></textarea>
+                        <label for="description" class="floating-label">Description</label>
+                    </div>
+
+                    <!-- Image URL Field -->
+                    <div class="input-group relative">
+                        <input 
+                            type="url" 
+                            name="img" 
+                            id="img" 
+                            placeholder=" "
+                            class="input-glass w-full px-4 py-4 text-white rounded-xl border-0 text-lg"
+                        >
+                        <label for="img" class="floating-label">Image URL</label>
+                    </div>
+
+                    <!-- Category Dropdown -->
+                    <div class="input-group relative">
+                            <select 
+                            name="category" 
+                            id="category" 
+                            required
+                            class="input-glass w-full px-4 py-4 text-white rounded-xl border-0 text-lg appearance-none cursor-pointer"
+                            style="background-image: url(&quot;data:image/svg+xml,%3Csvg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position-x: calc(100% - 16px); background-position-y: center;"
+                    >
+                            <option value="" disabled selected hidden></option>
+                            <option value="art" class="bg-gray-800 text-white">🎨 Art & Paintings</option>
+                            <option value="antiques" class="bg-gray-800 text-white">🏺 Antiques & Collectibles</option>
+                            <option value="jewelry" class="bg-gray-800 text-white">💎 Jewelry & Watches</option>
+                            <option value="electronics" class="bg-gray-800 text-white">📱 Electronics & Gadgets</option>
+                            <option value="fashion" class="bg-gray-800 text-white">👗 Fashion & Accessories</option>
+                            <option value="books" class="bg-gray-800 text-white">📚 Books & Manuscripts</option>
+                            <option value="music" class="bg-gray-800 text-white">🎵 Music & Instruments</option>
+                            <option value="sports" class="bg-gray-800 text-white">⚽ Sports Memorabilia</option>
+                            <option value="coins" class="bg-gray-800 text-white">🪙 Coins & Currency</option>
+                            <option value="toys" class="bg-gray-800 text-white">🧸 Toys & Games</option>
+                            <option value="furniture" class="bg-gray-800 text-white">🪑 Furniture & Decor</option>
+                            <option value="vehicles" class="bg-gray-800 text-white">🚗 Vehicles & Parts</option>
+                            <option value="stamps" class="bg-gray-800 text-white">📮 Stamps & Postcards</option>
+                            <option value="wine" class="bg-gray-800 text-white">🍷 Wine & Spirits</option>
+                            <option value="other" class="bg-gray-800 text-white">🔗 Other</option>
+                        </select>
+                      
+                    </div>
+
+                    <!-- Starting Bid Field -->
+                    <div class="input-group relative">
+                        <input 
+                            type="number" 
+                            name="bid" 
+                            id="bid" 
+                            placeholder=" "
+                            min="0.01"
+                            step="0.01"
+                            required 
+                            class="input-glass w-full px-4 py-4 text-white rounded-xl border-0 text-lg"
+                        >
+                        <label for="bid" class="floating-label">Starting Bid ($)</label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-6">
+                        <button 
+                            type="submit" 
+                            class="group w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 font-bold text-xl"
+                        >
+                            Create Auction
+                            <svg class="inline-block ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Trust Indicators -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10">
+                    <div class="text-center">
+                        <div class="text-xl font-bold text-emerald-400 mb-1">Secure</div>
+                        <div class="text-gray-400 text-sm">Verified Listings</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-bold text-blue-400 mb-1">Global</div>
+                        <div class="text-gray-400 text-sm">Worldwide Reach</div>
+                    </div>
+                    <div class="text-center md:col-span-1 col-span-2">
+                        <div class="text-xl font-bold text-purple-400 mb-1">24/7</div>
+                        <div class="text-gray-400 text-sm">Support Available</div>
+                    </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="description" placeholder="Description" name="description" required>
-                    <label for="description">Description</label>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="form-floating mb-3">
-                    <input type="number" class="form-control" id="bid" placeholder="Starting bid" name="bid" required>
-                    <label for="bid">Starting Bid</label>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="form-floating mb-3">
-                    <input type="url" class="form-control" id="img" placeholder="Image URL" name="img" required>
-                    <label for="img">Image URL</label>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <select name="category" id="category" class="form-select mb-3" required>
-                    <option value="no category">No Category</option>
-                    <option value="bags">Bags</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="clothes">Clothes</option>
-                    <option value="toys">Toys</option>
-                    <option value="cosmetics">Cosmetics</option>
-                </select>
-            </div>
-            <div class="col-12 text-center">
-                <input type="submit" value="Create" class="btn btn-primary w-50">
-            </div>
-        </form>
+        </div>
     </div>
+</div>
+
+<script>
+// Add interactive focus effects
+document.querySelectorAll('.input-glass').forEach(input => {
+    input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+    });
+    
+    input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+    });
+});
+
+// Form validation with modern styling
+document.querySelector('form').addEventListener('submit', function(e) {
+    const title = document.getElementById('title').value;
+    const category = document.getElementById('category').value;
+    const bid = document.getElementById('bid').value;
+    
+    if (!title || !category || !bid) {
+        e.preventDefault();
+        
+        // Add shake animation to form
+        this.style.animation = 'shake 0.5s ease-in-out';
+        setTimeout(() => {
+            this.style.animation = '';
+        }, 500);
+    }
+});
+
+// Add shake animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
 {% endblock %}

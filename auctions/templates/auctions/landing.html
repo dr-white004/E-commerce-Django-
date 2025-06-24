@@ -1,0 +1,420 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/20"></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-float"></div>
+            <div class="absolute top-40 right-20 w-48 h-48 bg-purple-500/10 rounded-full blur-xl animate-float" style="animation-delay: -2s;"></div>
+            <div class="absolute bottom-20 left-1/4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl animate-float" style="animation-delay: -4s;"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-6xl mx-auto">
+            <div class="animate-fade-in">
+                <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight">
+                    <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent animate-glow">
+                        Bid Beyond
+                    </span>
+                    <br>
+                    <span class="text-white/90">Boundaries</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+                    Enter the future of auctions. Discover rare treasures, place intelligent bids, and join an exclusive community where every auction tells a story.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                    <a href="{% url 'register' %}" class="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 font-semibold text-lg">
+                        <span class="relative z-10">Start Your Journey</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                    </a>
+                    
+                    <a href="{% url 'index' %}" class="group px-8 py-4 glass text-white rounded-full hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 font-semibold text-lg border border-white/20">
+                        Explore Live Auctions
+                        <svg class="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-blue-400 mb-2">10K+</div>
+                        <div class="text-gray-400 text-sm md:text-base">Active Users</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-purple-400 mb-2">50K+</div>
+                        <div class="text-gray-400 text-sm md:text-base">Items Sold</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-emerald-400 mb-2">99.9%</div>
+                        <div class="text-gray-400 text-sm md:text-base">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Why Choose <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AuctionVault</span>?
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Experience the next generation of online auctions with cutting-edge features designed for modern collectors and sellers.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="group card-hover">
+                    <div class="glass rounded-2xl p-8 h-full border border-white/10 hover:border-blue-500/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">Smart Discovery</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            AI-powered search and personalized recommendations help you discover items you'll love across all categories.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group card-hover">
+                    <div class="glass rounded-2xl p-8 h-full border border-white/10 hover:border-purple-500/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">Real-Time Bidding</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Lightning-fast bidding system with instant notifications and live updates. Never miss a winning opportunity.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group card-hover">
+                    <div class="glass rounded-2xl p-8 h-full border border-white/10 hover:border-emerald-500/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">Premium Listings</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Create stunning auction listings with professional photography tools and detailed item authentication.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="group card-hover">
+                    <div class="glass rounded-2xl p-8 h-full border border-white/10 hover:border-indigo-500/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">Secure Transactions</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Bank-level security with escrow protection, verified sellers, and comprehensive buyer protection programs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-24 relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 backdrop-blur-3xl"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">How It Works</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Three simple steps to start your auction journey and join thousands of satisfied users.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Step 1 -->
+                <div class="text-center group">
+                    <div class="relative mb-8">
+                        <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                            <span class="text-3xl font-bold text-white">1</span>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-400 rounded-full animate-ping opacity-20"></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Discover & Explore</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Browse through thousands of unique items across multiple categories. Use our advanced filters and AI recommendations to find exactly what you're looking for.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center group">
+                    <div class="relative mb-8">
+                        <div class="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                            <span class="text-3xl font-bold text-white">2</span>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-purple-400 rounded-full animate-ping opacity-20" style="animation-delay: -1s;"></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Bid & Watch</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Place strategic bids with our smart bidding system. Add items to your watchlist and receive real-time notifications about auction status and competitive bids.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center group">
+                    <div class="relative mb-8">
+                        <div class="w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                            <span class="text-3xl font-bold text-white">3</span>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-emerald-400 rounded-full animate-ping opacity-20" style="animation-delay: -2s;"></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Win & Collect</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Celebrate your victories with secure payment processing and reliable shipping. Build your collection or start selling your own treasures to the community.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">What Our Users Say</h2>
+                <p class="text-xl text-gray-300">Join thousands of satisfied collectors and sellers</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="glass rounded-2xl p-8 border border-white/10">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-semibold">JD</span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold">John Doe</h4>
+                            <p class="text-gray-400 text-sm">Art Collector</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">
+                        "AuctionVault transformed how I collect art. The authentication process and seller verification give me complete confidence in every purchase."
+                    </p>
+                    <div class="flex text-yellow-400 mt-4">
+                        ★★★★★
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-8 border border-white/10">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-semibold">SM</span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold">Sarah Miller</h4>
+                            <p class="text-gray-400 text-sm">Vintage Dealer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">
+                        "As a seller, I love the professional listing tools and the engaged community. My sales have increased 300% since joining the platform."
+                    </p>
+                    <div class="flex text-yellow-400 mt-4">
+                        ★★★★★
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-8 border border-white/10">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-semibold">MR</span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold">Mike Rodriguez</h4>
+                            <p class="text-gray-400 text-sm">Electronics Enthusiast</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">
+                        "The real-time bidding system is incredibly smooth. I've won several rare electronics and the whole process was seamless and secure."
+                    </p>
+                    <div class="flex text-yellow-400 mt-4">
+                        ★★★★★
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                Ready to Start Your
+                <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Auction Journey</span>?
+            </h2>
+            <p class="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
+                Join AuctionVault today and discover a world of unique treasures, competitive bidding, and a thriving community of collectors and sellers.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="{% url 'register' %}" class="group px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 font-bold text-xl">
+                    Join The Community
+                    <svg class="inline-block ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+                
+                <a href="{% url 'index' %}" class="px-12 py-4 glass text-white rounded-full hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 font-bold text-xl border border-white/20">
+                    Browse Auctions
+                </a>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-emerald-400 mb-2">256-bit</div>
+                    <div class="text-gray-400">SSL Encryption</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-400 mb-2">24/7</div>
+                    <div class="text-gray-400">Customer Support</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-400 mb-2">100%</div>
+                    <div class="text-gray-400">Money Back</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-pink-400 mb-2">Verified</div>
+                    <div class="text-gray-400">Seller Network</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-slate-800/50 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v2"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            AuctionVault
+                        </span>
+                    </div>
+                    <p class="text-gray-300 max-w-md leading-relaxed">
+                        The premier destination for online auctions. Discover, bid, and collect unique items from verified sellers around the world.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <div class="space-y-2">
+                        <a href="{% url 'index' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Live Auctions</a>
+                        <a href="{% url 'category' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Categories</a>
+                        <a href="{% url 'create' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Sell Items</a>
+                        <a href="{% url 'closedlisting' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Archive</a>
+                    </div>
+                </div>
+
+                <!-- Account -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Account</h4>
+                    <div class="space-y-2">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'profile' user.username %}" class="block text-gray-400 hover:text-white transition-colors duration-200">My Profile</a>
+                            <a href="{% url 'yourwatchlist' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Watchlist</a>
+                            <a href="{% url 'logout' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Logout</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Login</a>
+                            <a href="{% url 'register' %}" class="block text-gray-400 hover:text-white transition-colors duration-200">Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">
+                    © 2025 AuctionVault. All rights reserved. Built with passion for collectors.
+                </p>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
+    </style>
+{% endblock %}

@@ -1,99 +1,327 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h1>goto</h1>
-    <div style="display: flex; flex-direction: row; margin: 15px; gap: 150px; justify-content: space-between; border: 2px solid red;">
-        <img src={{ entry.image }} alt="not available" style="height: auto; width: 400px;">
-        <div style="display: flex; gap: 40px; flex-direction: column; justify-content: space-evenly;">
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .input-glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .input-glass:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        outline: none;
+    }
+    
+    .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        padding: 2px;
+    }
+    
+    .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+        border-radius: 20px;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .bg-main {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f3460 100%);
+        min-height: 100vh;
+    }
+    
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-active {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .status-closed {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    
+    .winner-badge {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border: 2px solid rgba(245, 158, 11, 0.3);
+        color: white;
+        padding: 16px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+    }
+    
+    .comment-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .comment-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6b7280, #4b5563);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+    }
+    
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #4b5563, #374151);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+    }
+    
+    .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+    
+    .price-highlight {
+        background: linear-gradient(135deg, #10b981, #059669);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+    
+    .category-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        display: inline-block;
+        font-size: 16px;
+    }
+</style>
 
-            <div>
-                <p><i>Item-name</i>: {{ entry.title }}</p>
-                <p><i>Description</i>: {{ entry.description }}</p>
-                <p><i>Category</i>: {{ entry.category }}</p>
-            </div>
-
-            <div>
-                {% if user.is_authenticated %}
-                    <h6>Current Bid: {{ entry.price }}</h6>
-                    <form action="{% url 'newbid' num=entry.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="newbid" placeholder="Enter your bid">
-                            <button type="submit" class="btn btn-info">Update Bid</button>
-                        </div>
-                    </form>
-                {% endif %}
-
-                {% if message %}
-                    <div class="alert {% if updated %}alert-success{% else %}alert-danger{% endif %} mt-3" role="alert">
-                        {{ message }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div>
-                {% if user.is_authenticated %}
-                    <form action="{% url 'comment' num=entry.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="text" name="newcomment" class="form-control" placeholder="Add a comment">
-                            <button type="submit" class="btn btn-info">Add Comment</button>
-                        </div>
-                    </form>
-                {% endif %}
-
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Display Comments</button>
-
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Comments</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        {% for comment in comments %}
-                            <small>{{ comment.author }}</small>
-                            <p>{{ comment.comment }}</p>
-                        {% endfor %}
+<div class="bg-main py-8 px-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full animate-float"></div>
+        <div class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-blue-600/20 rounded-full animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Main Content -->
+        <div class="gradient-border">
+            <div class="glass rounded-2xl p-8 md:p-12 relative z-10">
+                <!-- Header Section -->
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ entry.title }}</h1>
+                    <div class="flex justify-center items-center space-x-4 mb-6">
+                        <span class="status-badge {% if entry.checking %}status-active{% else %}status-closed{% endif %}">
+                            {% if entry.checking %}● Active{% else %}● Closed{% endif %}
+                        </span>
+                        <span class="text-gray-300 flex items-center">
+                            <span class="category-icon">
+                                {% if entry.category == "art" %}🎨
+                                {% elif entry.category == "antiques" %}🏺
+                                {% elif entry.category == "jewelry" %}💎
+                                {% elif entry.category == "electronics" %}📱
+                                {% elif entry.category == "fashion" %}👗
+                                {% elif entry.category == "books" %}📚
+                                {% elif entry.category == "music" %}🎵
+                                {% elif entry.category == "sports" %}⚽
+                                {% elif entry.category == "coins" %}🪙
+                                {% elif entry.category == "toys" %}🧸
+                                {% elif entry.category == "furniture" %}🪑
+                                {% elif entry.category == "vehicles" %}🚗
+                                {% elif entry.category == "stamps" %}📮
+                                {% elif entry.category == "wine" %}🍷
+                                {% else %}🔗
+                                {% endif %}
+                            </span>
+                            {{ entry.category|default:"None"|title }}
+                        </span>
                     </div>
                 </div>
-            </div>
 
-        </div>
+                <!-- Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Image Section -->
+                    {% if entry.image %}
+                        <div class="glass-card rounded-xl p-4">
+                            <img src="{{ entry.image }}" alt="{{ entry.title }}" class="w-full h-auto rounded-lg shadow-lg">
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Details Section -->
+                    <div class="{% if not entry.image %}lg:col-span-2{% endif %}">
+                        <div class="glass-card rounded-xl p-6 mb-6">
+                            <h2 class="text-2xl font-bold text-white mb-4">Description</h2>
+                            <p class="text-gray-300 leading-relaxed">{{ entry.description }}</p>
+                        </div>
+                        
+                        <!-- Bid Information -->
+                        <div class="glass-card rounded-xl p-6 mb-6">
+                            <h2 class="text-2xl font-bold text-white mb-4">Current Bid</h2>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="price-highlight">${{ entry.price.bid }}</span>
+                                    <p class="text-gray-300 mt-1">by <span class="font-semibold text-blue-400">{{ entry.price.user }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;">
-            <div>
-                {% if user.is_authenticated %}
-                    {% if not present %}
-                        <form action="{% url 'addwatchlist' num=entry.id %}" method="post">
+                <!-- Winner Notification -->
+                {% if not entry.checking and entry.winner == request.user %}
+                    <div class="winner-badge mb-8">
+                        <div class="text-2xl mb-2">🏆</div>
+                        <h3 class="text-xl font-bold mb-2">Congratulations!</h3>
+                        <p>You won this auction for <span class="font-bold">${{ entry.price.bid }}</span>!</p>
+                    </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-4 mb-8 justify-center">
+                    {% if entry.checking and not is_owner %}
+                        <!-- Bid Form -->
+                        <form method="POST" action="{% url 'newbid' entry.id %}" class="flex space-x-2">
                             {% csrf_token %}
-                            <input type="submit" value="Add to Watchlist" class="btn btn-info">
+                            <input type="number" name="newbid" placeholder="Your Bid" required 
+                                   class="input-glass px-4 py-3 text-white rounded-xl border-0 text-lg w-32">
+                            <button type="submit" class="btn-primary">Place Bid</button>
                         </form>
-                    {% else %}
-                        <form action="{% url 'addwatchlist' num=entry.id %}" method="post">
+                        
+                        <!-- Watchlist Form -->
+                        <form method="POST" action="{% url 'addwatchlist' entry.id %}">
                             {% csrf_token %}
-                            <input type="submit" value="Remove from Watchlist" class="btn btn-info">
+                            <button type="submit" class="btn-secondary">
+                                {{ present|yesno:"❤️ Remove from Watchlist,🤍 Add to Watchlist" }}
+                            </button>
                         </form>
                     {% endif %}
-                {% endif %}
-            </div>
+                    
+                    {% if is_owner and entry.checking %}
+                        <form method="POST" action="{% url 'close_auction' entry.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-danger">Close Auction</button>
+                        </form>
+                    {% endif %}
+                </div>
 
-            <div>
-                {% if is_owner and entry.checking %}
-                    <form action="{% url 'close_auction' num=entry.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="Close Auction" class="btn btn-info">
-                    </form>
-                {% endif %}
-                {% if is_owner and not entry.checking %}
-                    <p>You closed this auction.</p>
-                {% endif %}
-                {% if update_owner and not entry.checking %}
-                    <p>You won this auction.</p>
-                {% endif %}
-                {% if not update_owner and not entry.checking and not is_owner %}
-                    <p>This auction is closed.</p>
-                {% endif %}
+                <!-- Comments Section -->
+                <div class="glass-card rounded-xl p-6">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <span class="mr-2">💬</span> Comments
+                    </h2>
+                    
+                    {% if comments %}
+                        <div class="space-y-3 mb-6">
+                            {% for comment in comments %}
+                                <div class="comment-card">
+                                    <p class="text-gray-300">
+                                        <span class="font-semibold text-blue-400">{{ comment.author }}</span>: 
+                                        {{ comment.comment }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-400 mb-6 text-center py-4">No comments yet. Be the first to comment!</p>
+                    {% endif %}
+                    
+                    {% if request.user.is_authenticated %}
+                        <form method="POST" action="{% url 'comment' entry.id %}" class="space-y-4">
+                            {% csrf_token %}
+                            <textarea name="newcomment" placeholder="Add a comment..." 
+                                      class="input-glass w-full px-4 py-3 text-white rounded-xl border-0 text-lg resize-none" 
+                                      rows="3"></textarea>
+                            <button type="submit" class="btn-primary">Post Comment</button>
+                        </form>
+                    {% else %}
+                        <p class="text-gray-400 text-center py-4">Please log in to post comments.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

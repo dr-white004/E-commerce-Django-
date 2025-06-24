@@ -1,29 +1,224 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="container my-4">
-    <h2 class="text-center mb-4">Watchlist</h2>
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        padding: 2px;
+    }
+    
+    .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+        border-radius: 20px;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .bg-main {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f3460 100%);
+        min-height: 100vh;
+    }
+    
+    .watchlist-item {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .watchlist-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+    
+    .watchlist-item:hover::before {
+        left: 100%;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-active {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .status-closed {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .price-highlight {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(234, 179, 8, 0.2));
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        border-radius: 8px;
+        padding: 4px 8px;
+        display: inline-block;
+    }
+    
+    .image-placeholder {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .no-items-container {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    
+    .no-items-container .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+    }
+</style>
 
-    {% for entry in watchlist %}
-    <a href="{% url 'goto' num=entry.id %}" style="text-decoration: none; color: inherit;">
-        <div class="row mb-4">
-            <div class="col-12 col-md-4">
-                <img src="{{ entry.image }}" alt="not available" class="img-fluid" style="max-height: 250px;">
-            </div>
-            <div class="col-12 col-md-8">
-                <ul class="list-unstyled">
-                    <li><strong>{{ entry.title }}</strong></li>
-                    <li>{{ entry.description }}</li>
-                    <li>Category: {{ entry.category }}</li>
-                    <li>Price: {{ entry.price }}</li>
-                </ul>
-            </div>
+<div class="bg-main py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full animate-float"></div>
+        <div class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-blue-600/20 rounded-full animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Header -->
+        <div class="text-center mb-12 relative z-10">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">
+                Your
+                <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Watchlist</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-xl mx-auto">
+                Keep track of your favorite auction items
+            </p>
         </div>
-    </a>
-    {% endfor %}
 
-    {% if watchlist|length == 0 %}
-        <p class="text-center">Your watchlist is empty.</p>
-    {% endif %}
+        {% if watchlist %}
+            <!-- Watchlist Container -->
+            <div class="gradient-border">
+                <div class="glass rounded-2xl p-8 md:p-12 relative z-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for entry in watchlist %}
+                            <a href="{% url 'goto' entry.id %}" class="watchlist-item glass-card rounded-xl overflow-hidden block text-white hover:text-white no-underline">
+                                <div class="flex flex-col h-full">
+                                    <!-- Image Section -->
+                                    <div class="relative h-48 overflow-hidden">
+                                        {% if entry.image %}
+                                            <img src="{{ entry.image }}" alt="{{ entry.title }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                            <div class="image-placeholder w-full h-full">
+                                                🖼️
+                                            </div>
+                                        {% endif %}
+                                        <!-- Status Badge -->
+                                        <div class="absolute top-3 right-3">
+                                            <span class="status-badge {% if entry.checking %}status-active{% else %}status-closed{% endif %}">
+                                                {% if entry.checking %}Active{% else %}Closed{% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Content Section -->
+                                    <div class="p-6 flex-1 flex flex-col">
+                                        <h2 class="text-xl font-bold mb-3 text-white line-clamp-2">
+                                            {{ entry.title }}
+                                        </h2>
+                                        
+                                        <p class="text-gray-300 text-sm mb-4 line-clamp-3 flex-1">
+                                            {{ entry.description|truncatewords:20 }}
+                                        </p>
+                                        
+                                        <div class="space-y-2">
+                                            <!-- Category -->
+                                            <div class="flex items-center text-sm">
+                                                <span class="text-gray-400 mr-2">📂</span>
+                                                <span class="text-gray-300">{{ entry.category|default:"Uncategorized" }}</span>
+                                            </div>
+                                            
+                                            <!-- Current Bid -->
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-gray-400 text-sm">Current Bid:</span>
+                                                <span class="price-highlight text-white font-bold">
+                                                    ${{ entry.price.bid }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- No Items Message -->
+            <div class="gradient-border">
+                <div class="glass rounded-2xl relative z-10">
+                    <div class="no-items-container">
+                        <div class="icon">👀</div>
+                        <h2 class="text-3xl font-bold text-white mb-4">Your Watchlist is Empty</h2>
+                        <p class="text-gray-300 text-lg mb-8 max-w-md mx-auto">
+                            Start exploring auctions and add items to your watchlist to keep track of them here.
+                        </p>
+                        <a href="{% url 'index' %}" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                            Browse Auctions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

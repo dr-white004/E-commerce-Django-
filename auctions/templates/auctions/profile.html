@@ -1,0 +1,382 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .glass-section {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        padding: 2px;
+    }
+    
+    .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+        border-radius: 20px;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .bg-main {
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f3460 100%);
+        min-height: 100vh;
+    }
+    
+    .profile-item {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .profile-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+    
+    .profile-item:hover::before {
+        left: 100%;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-active {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .status-closed {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .status-won {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+    
+    .price-highlight {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(234, 179, 8, 0.2));
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        border-radius: 8px;
+        padding: 4px 8px;
+        display: inline-block;
+        font-weight: 600;
+    }
+    
+    .section-icon {
+        font-size: 1.5rem;
+        margin-right: 0.75rem;
+        display: inline-block;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .empty-state .icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.7;
+    }
+    
+    .bid-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .bid-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        text-align: center;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .stat-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0.5rem;
+    }
+</style>
+
+<div class="bg-main py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full animate-float"></div>
+        <div class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-blue-600/20 rounded-full animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Header -->
+        <div class="text-center mb-12 relative z-10">
+            <div class="text-6xl mb-4">👤</div>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">{{ profile_user.username }}</span>'s Profile
+            </h1>
+            <p class="text-xl text-gray-300">
+                Auction activity and achievements
+            </p>
+        </div>
+
+        <div class="relative z-10 space-y-8">
+            <!-- Profile Stats -->
+            <div class="gradient-border">
+                <div class="glass rounded-2xl p-8">
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">{{ auctions|length }}</div>
+                            <div class="stat-label">Created</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ bids|length }}</div>
+                            <div class="stat-label">Bids Placed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ watchlist|length }}</div>
+                            <div class="stat-label">Watching</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ won_auctions|length }}</div>
+                            <div class="stat-label">Won</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Created Auctions -->
+            <div class="gradient-border">
+                <div class="glass-section rounded-2xl p-8">
+                    <h2 class="text-3xl font-bold text-white mb-6 flex items-center">
+                        <span class="section-icon">🏛️</span>
+                        Created Auctions
+                    </h2>
+                    {% if auctions %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {% for auction in auctions %}
+                                <div class="profile-item glass-card rounded-xl p-6">
+                                    <a href="{% url 'goto' auction.id %}" class="text-lg font-semibold text-white hover:text-blue-300 transition-colors no-underline block mb-3">
+                                        {{ auction.title }}
+                                    </a>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-400 text-sm">Current Bid:</span>
+                                            <span class="price-highlight text-white">
+                                                ${{ auction.price.bid }}
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-400 text-sm">Status:</span>
+                                            <span class="status-badge {% if auction.checking %}status-active{% else %}status-closed{% endif %}">
+                                                {% if auction.checking %}Active{% else %}Closed{% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="icon">📦</div>
+                            <p>No auctions created yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Bids Placed -->
+            <div class="gradient-border">
+                <div class="glass-section rounded-2xl p-8">
+                    <h2 class="text-3xl font-bold text-white mb-6 flex items-center">
+                        <span class="section-icon">💰</span>
+                        Bids Placed
+                    </h2>
+                    {% if bids %}
+                        <div class="space-y-3">
+                            {% for bid in bids %}
+                                {% with auction=bid.auctioning_set.first %}
+                                    {% if auction %}
+                                        <div class="bid-item">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <a href="{% url 'goto' auction.id %}" class="text-white hover:text-blue-300 font-semibold no-underline">
+                                                        {{ auction.title }}
+                                                    </a>
+                                                </div>
+                                                <div class="price-highlight text-white">
+                                                    ${{ bid.bid }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="icon">🤝</div>
+                            <p>No bids placed yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Watchlist -->
+            <div class="gradient-border">
+                <div class="glass-section rounded-2xl p-8">
+                    <h2 class="text-3xl font-bold text-white mb-6 flex items-center">
+                        <span class="section-icon">👀</span>
+                        Watchlist
+                    </h2>
+                    {% if watchlist %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {% for item in watchlist %}
+                                <div class="profile-item glass-card rounded-xl p-6">
+                                    <a href="{% url 'goto' item.id %}" class="text-lg font-semibold text-white hover:text-blue-300 transition-colors no-underline block mb-3">
+                                        {{ item.title }}
+                                    </a>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-400 text-sm">Current Bid:</span>
+                                        <span class="price-highlight text-white">
+                                            ${{ item.price.bid }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="icon">📋</div>
+                            <p>No items in watchlist</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Won Auctions -->
+            <div class="gradient-border">
+                <div class="glass-section rounded-2xl p-8">
+                    <h2 class="text-3xl font-bold text-white mb-6 flex items-center">
+                        <span class="section-icon">🏆</span>
+                        Won Auctions
+                    </h2>
+                    {% if won_auctions %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {% for auction in won_auctions %}
+                                <div class="profile-item glass-card rounded-xl p-6">
+                                    <a href="{% url 'goto' auction.id %}" class="text-lg font-semibold text-white hover:text-blue-300 transition-colors no-underline block mb-3">
+                                        {{ auction.title }}
+                                    </a>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-400 text-sm">Won for:</span>
+                                            <span class="price-highlight text-white">
+                                                ${{ auction.price.bid }}
+                                            </span>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <span class="status-badge status-won">
+                                                Winner
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="icon">🎯</div>
+                            <p>No auctions won yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
